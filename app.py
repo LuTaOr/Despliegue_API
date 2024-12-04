@@ -5,15 +5,18 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import pandas as pd
+import subprocess
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
 
-# Cargar o inicializar el modelo
+# Rutas absolutas
 MODEL_PATH = "/home/LuTaOr/Despliegue_API/iris_model.pkl"
 DATA_PATH = "/home/LuTaOr/Despliegue_API/iris.csv"
 
-
+# Cargar o inicializar el modelo
+if not os.path.exists(DATA_PATH):
+    raise FileNotFoundError(f"Dataset no encontrado en {DATA_PATH}")
 if not os.path.exists(MODEL_PATH):
     data = pd.read_csv(DATA_PATH)
     X = data.iloc[:, :-1]
@@ -24,6 +27,7 @@ if not os.path.exists(MODEL_PATH):
 else:
     model = pickle.load(open(MODEL_PATH, "rb"))
 
+# Rutas
 @app.route("/", methods=["GET"])
 def home():
     return jsonify({
@@ -76,3 +80,4 @@ def webhook():
 
 if __name__ == "__main__":
     app.run()
+
