@@ -86,7 +86,7 @@ def retrain():
 @app.route("/webhook", methods=["POST"])
 def webhook():
     repo_path = "/home/LuTaOr/Despliegue_API"
-    server_wsgi = "/var/www/LuTaOr_pythonanywhere_com_wsgi.py"
+    server_wsgi = "/var/www/lutaor_pythonanywhere_com_wsgi.py"
 
     if request.is_json:
         subprocess.run(["git", "-C", repo_path, "pull"], check=True)
