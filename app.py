@@ -39,7 +39,7 @@ else:
 @app.route("/", methods=["GET"])
 def home():
     response = {
-        "message": "Bienvenido a la API de predicción del modelo Iris",
+        "message": "Cambio_Bienvenido a la API de predicción del modelo Iris",
         "endpoints": {
             "/api/v1/predict": "Proporciona predicciones basadas en las características de entrada (GET)",
             "/api/v1/retrain": "Reentrena el modelo con un nuevo dataset (GET)"
