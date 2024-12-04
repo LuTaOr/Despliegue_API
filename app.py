@@ -15,6 +15,13 @@ app.config["DEBUG"] = True
 MODEL_PATH = "/home/LuTaOr/Despliegue_API/iris_model.pkl"
 DATA_PATH = "/home/LuTaOr/Despliegue_API/iris.csv"
 
+# Mapeo de clases a nombres de variedades
+CLASS_MAPPING = {
+    0: "Iris-setosa",
+    1: "Iris-versicolor",
+    2: "Iris-virginica"
+}
+
 # Cargar o inicializar el modelo
 if not os.path.exists(DATA_PATH):
     raise FileNotFoundError(f"Dataset no encontrado en {DATA_PATH}")
@@ -57,7 +64,9 @@ def predict():
         return jsonify({"error": "Debe proporcionar todos los parámetros numéricos"}), 400
 
     prediction = model.predict([[sepal_length, sepal_width, petal_length, petal_width]])
-    return jsonify({"prediction": int(prediction[0])})
+    class_name = CLASS_MAPPING[int(prediction[0])]
+
+    return jsonify({"prediction": class_name})
 
 @app.route("/api/v1/retrain", methods=["GET"])
 def retrain():
