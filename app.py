@@ -39,7 +39,7 @@ def home():
         }
     }
     return app.response_class(
-        response=json.dumps(response, ensure_ascii=False),
+        response=json.dumps(response, ensure_ascii=False, indent=4),
         status=200,
         mimetype='application/json'
     )
