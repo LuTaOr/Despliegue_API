@@ -89,31 +89,11 @@ def webhook():
     server_wsgi = "/var/www/lutaor_pythonanywhere_com_wsgi.py"
 
     if request.is_json:
-        try:
-            # Ejecuta git pull en el directorio del repositorio
-            pull = subprocess.run(
-                ["git", "-C", repo_path, "pull"],
-                check=True,
-                capture_output=True,
-                text=True
-            )
-            # Toca el archivo WSGI para recargar la aplicación
-            touch = subprocess.run(
-                ["touch", server_wsgi],
-                check=True,
-                capture_output=True,
-                text=True
-            )
-            return jsonify({
-                "message": "Despliegue actualizado con éxito",
-                "git_output": pull.stdout,
-                "touch_output": touch.stdout
-            }), 200
-        except subprocess.CalledProcessError as e:
-            return jsonify({"error": f"Error ejecutando comandos: {e.stderr}"}), 500
+        subprocess.run(["git", "-C", repo_path, "pull"], check=True)
+        subprocess.run(["touch", server_wsgi], check=True)
+        return jsonify({"message": "Despliegue actualizado con éxito"}), 200
     else:
         return jsonify({"error": "Solicitud no válida"}), 400
-
 
 if __name__ == "__main__":
     app.run()
