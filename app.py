@@ -30,13 +30,15 @@ else:
 # Rutas
 @app.route("/", methods=["GET"])
 def home():
-    return jsonify({
+    response = {
         "message": "Bienvenido a la API de predicción del modelo Iris",
         "endpoints": {
             "/api/v1/predict": "Proporciona predicciones basadas en las características de entrada (GET)",
             "/api/v1/retrain": "Reentrena el modelo con un nuevo dataset (GET)"
         }
-    })
+    }
+    return jsonify(response), 200, {'Content-Type': 'application/json; charset=utf-8'}
+
 
 @app.route("/api/v1/predict", methods=["GET"])
 def predict():
@@ -66,15 +68,18 @@ def retrain():
     else:
         return jsonify({"error": "No se encontró el dataset para reentrenamiento"}), 404
 
-@app.route("/", methods=["GET"])
-def home():
-    response = {
-        "message": "Bienvenido a la API de predicción del modelo Iris",
-        "endpoints": {
-            "/api/v1/predict": "Proporciona predicciones basadas en las características de entrada (GET)",
-            "/api/v1/retrain": "Reentrena el modelo con un nuevo dataset (GET)"
-        }
-    }
-    return jsonify(response), 200, {'Content-Type': 'application/json; charset=utf-8'}
+@app.route("/webhook", methods=["POST"])
+def webhook():
+    repo_path = "/home/LuTaOr/Despliegue_API"
+    server_wsgi = "/var/www/LuTaOr_pythonanywhere_com_wsgi.py"
 
+    if request.is_json:
+        subprocess.run(["git", "-C", repo_path, "pull"], check=True)
+        subprocess.run(["touch", server_wsgi], check=True)
+        return jsonify({"message": "Despliegue actualizado con éxito"}), 200
+    else:
+        return jsonify({"error": "Solicitud no válida"}), 400
+
+if __name__ == "__main__":
+    app.run()
 
