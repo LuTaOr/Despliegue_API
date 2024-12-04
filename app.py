@@ -6,7 +6,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import pandas as pd
 
-# Crear la aplicación Flask
 app = Flask(__name__)
 app.config["DEBUG"] = True
 
@@ -15,7 +14,6 @@ MODEL_PATH = "iris_model.pkl"
 DATA_PATH = "iris.csv"
 
 if not os.path.exists(MODEL_PATH):
-    # Si no existe el modelo, entrenarlo por primera vez
     data = pd.read_csv(DATA_PATH)
     X = data.iloc[:, :-1]
     y = data['species']
@@ -23,10 +21,8 @@ if not os.path.exists(MODEL_PATH):
     model.fit(X, y)
     pickle.dump(model, open(MODEL_PATH, "wb"))
 else:
-    # Cargar el modelo entrenado
     model = pickle.load(open(MODEL_PATH, "rb"))
 
-# Landing Page
 @app.route("/", methods=["GET"])
 def home():
     return jsonify({
@@ -37,7 +33,6 @@ def home():
         }
     })
 
-# Endpoint de predicción
 @app.route("/api/v1/predict", methods=["GET"])
 def predict():
     try:
@@ -46,12 +41,11 @@ def predict():
         petal_length = float(request.args.get("petal_length"))
         petal_width = float(request.args.get("petal_width"))
     except (TypeError, ValueError):
-        return jsonify({"error": "Debe proporcionar todos los parámetros numéricos (sepal_length, sepal_width, petal_length, petal_width)"}), 400
+        return jsonify({"error": "Debe proporcionar todos los parámetros numéricos"}), 400
 
     prediction = model.predict([[sepal_length, sepal_width, petal_length, petal_width]])
     return jsonify({"prediction": int(prediction[0])})
 
-# Endpoint de reentrenamiento
 @app.route("/api/v1/retrain", methods=["GET"])
 def retrain():
     if os.path.exists(DATA_PATH):
@@ -59,22 +53,25 @@ def retrain():
         X = data.iloc[:, :-1]
         y = data['species']
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-        # Reentrenar el modelo
         new_model = LogisticRegression(max_iter=200)
         new_model.fit(X_train, y_train)
-
-        # Evaluación
         accuracy = accuracy_score(y_test, new_model.predict(X_test))
         pickle.dump(new_model, open(MODEL_PATH, "wb"))
-
-        return jsonify({
-            "message": "Modelo reentrenado con éxito",
-            "accuracy": accuracy
-        })
+        return jsonify({"message": "Modelo reentrenado", "accuracy": accuracy})
     else:
         return jsonify({"error": "No se encontró el dataset para reentrenamiento"}), 404
 
-# Iniciar la aplicación
+@app.route("/webhook", methods=["POST"])
+def webhook():
+    repo_path = "/home/tu_usuario/mi_api_modelo"
+    server_wsgi = "/var/www/tu_usuario_pythonanywhere_com_wsgi.py"
+
+    if request.is_json:
+        subprocess.run(["git", "-C", repo_path, "pull"], check=True)
+        subprocess.run(["touch", server_wsgi], check=True)
+        return jsonify({"message": "Despliegue actualizado con éxito"}), 200
+    else:
+        return jsonify({"error": "Solicitud no válida"}), 400
+
 if __name__ == "__main__":
     app.run()
