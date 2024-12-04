@@ -10,8 +10,9 @@ app = Flask(__name__)
 app.config["DEBUG"] = True
 
 # Cargar o inicializar el modelo
-MODEL_PATH = "iris_model.pkl"
-DATA_PATH = "iris.csv"
+MODEL_PATH = "/home/LuTaOr/Despliegue_API/iris_model.pkl"
+DATA_PATH = "/home/LuTaOr/Despliegue_API/iris.csv"
+
 
 if not os.path.exists(MODEL_PATH):
     data = pd.read_csv(DATA_PATH)
@@ -63,8 +64,8 @@ def retrain():
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
-    repo_path = "/home/tu_usuario/mi_api_modelo"
-    server_wsgi = "/var/www/tu_usuario_pythonanywhere_com_wsgi.py"
+    repo_path = "/home/LuTaOr/Despliegue_API"
+    server_wsgi = "/var/www/LuTaOr_pythonanywhere_com_wsgi.py"
 
     if request.is_json:
         subprocess.run(["git", "-C", repo_path, "pull"], check=True)
