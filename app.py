@@ -1,5 +1,6 @@
 import os
 import pickle
+import json
 from flask import Flask, jsonify, request
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
@@ -37,7 +38,12 @@ def home():
             "/api/v1/retrain": "Reentrena el modelo con un nuevo dataset (GET)"
         }
     }
-    return jsonify(response), 200, {'Content-Type': 'application/json; charset=utf-8'}
+    return app.response_class(
+        response=json.dumps(response, ensure_ascii=False),
+        status=200,
+        mimetype='application/json'
+    )
+
 
 
 @app.route("/api/v1/predict", methods=["GET"])
