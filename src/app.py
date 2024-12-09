@@ -1,9 +1,9 @@
 """
 app.py
 
-Author: Lander Combarro Exposito
-Created: 2024/04/12
-Last Modified: 2024/04/12
+Author: Luis Tamayo Ortiz
+Created: 2024/12/04
+Last Modified: 2024/12/09
 
 Iris Model Prediction API
 -------------------------
@@ -131,8 +131,8 @@ def accuracy():
 # Webhook
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    repo_path = '/home/elecomexp/api_iris_model'
-    server_wsgi = '/var/www/elecomexp_pythonanywhere_com_wsgi.py'
+    repo_path = '/home/LuTaOr/Despliegue_API'
+    server_wsgi = '/var/www/lutaor_pythonanywhere_com_wsgi.py'
 
     if request.is_json:
         subprocess.run(['git', '-C', repo_path, 'pull'], check=True)
@@ -145,8 +145,8 @@ def webhook():
 # @app.route("/webhook", methods=["POST"])
 # def webhook():
 #     # Ruta al repositorio donde se realizará el pull
-#     path_repo = "/home/Elecomexp/despliegue_git"
-#     servidor_web = "/var/www/elecomexp_pythonanywhere_com_wsgi.py"
+#     path_repo = "/home/LuTaOr/Despliegue_API"
+#     servidor_web = "/var/www/lutaor_pythonanywhere_com_wsgi.py"
 
 #     # Comprueba si la solicitud POST contiene datos JSON
 #     if request.is_json:

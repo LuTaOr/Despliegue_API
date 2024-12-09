@@ -1,9 +1,9 @@
 """
 variables.py
 
-Author: Lander Combarro Exposito
-Created: 2024/04/12
-Last Modified: 2024/04/12
+Author: Luis Tamayo Ortiz
+Created: 2024/12/09
+Last Modified: 2024/12/09
 """
 
 # Relative paths
