@@ -49,7 +49,7 @@ model = load_or_initialize_model(data_path=DATA_PATH, model_path=MODEL_PATH)
 def home():
     # Define the response dictionary with message and available endpoints
     response = {
-        'message': 'Welcome to the Iris flower model prediction API',
+        'message': 'Cambio_Welcome to the Iris flower model prediction API',
         'endpoints': {
             '/api/v1/predict': 'Provides predictions based on input features (GET)',
             '/api/v1/retrain': 'Retrains the model with a new dataset (GET)',
