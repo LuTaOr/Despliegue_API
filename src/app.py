@@ -49,17 +49,15 @@ model = load_or_initialize_model(data_path=DATA_PATH, model_path=MODEL_PATH)
 def home():
     # Define the response dictionary with message and available endpoints
     response = {
-        'message': 'Cambio_Welcome to the Iris flower model prediction API',
-        'endpoints': {
-            '/api/v1/predict': 'Provides predictions based on input features (GET)',
-            '/api/v1/retrain': 'Retrains the model with a new dataset (GET)',
-            '/api/v1/accuracy': 'Shows the current accuracy of the model (GET)'
-        },
-        'example': {
-            '/api/v1/predict?sepal_length=5.0&sepal_width=3.6&petal_length=1.4&petal_width=0.2': 
-                'Add an endpoint like this one to predict the species of the Iris flower using the provided feature values'
-        }
+    "endpoints": {
+        "/api/v1/predict": "Proporciona predicciones basadas en las características de entrada (GET)",
+        "/api/v1/retrain": "Reentrena el modelo con un nuevo dataset (GET)"
+    },
+    "example": {
+        "/api/v1/predict?sepal_length=5.0&sepal_width=3.6&petal_length=1.4&petal_width=0.2":
+        "\nAdd an endpoint like this one to predict the species of the Iris flower using the provided feature values"
     }
+}
 
     # Return the response as a JSON with proper formatting
     return app.response_class(
